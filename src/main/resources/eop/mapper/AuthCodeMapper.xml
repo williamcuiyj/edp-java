@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="eop.mapper.AuthCodeMapper">
+
+	<resultMap id="AuthCodeResultMap" type="eop.model.AuthCode">
+        <result property="authCodeId" column="auth_code_ID"/>
+        <result property="name" column="NAME"/>
+        <result property="requstTime" column="REQUST_TIME"/>
+        <result property="authCode" column="AUTH_CODE"/>
+        <result property="isInvalid" column="IS_INVALID"/>
+        <result property="type" column="TYPE"/>
+	</resultMap>
+	
+	<sql id="AuthCodeColumns">
+	    <![CDATA[
+		auth_code_ID,NAME,REQUST_TIME,AUTH_CODE,IS_INVALID,TYPE
+	    ]]>
+	</sql>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="authCodeId">
+    <![CDATA[
+        INSERT INTO auth_code (
+        	auth_code_ID ,
+        	NAME ,
+        	REQUST_TIME ,
+        	AUTH_CODE ,
+        	IS_INVALID ,
+        	TYPE 
+        ) VALUES (
+        	#{authCodeId} ,
+        	#{name} ,
+        	#{requstTime} ,
+        	#{authCode} ,
+        	#{isInvalid} ,
+        	#{type} 
+        )
+    ]]>
+	</insert>
+    
+	<update id="update" >
+    <![CDATA[
+        UPDATE auth_code SET
+	        NAME = #{name} ,
+	        REQUST_TIME = #{requstTime} ,
+	        AUTH_CODE = #{authCode} ,
+	        IS_INVALID = #{isInvalid} ,
+	        TYPE = #{type} 
+        WHERE 
+	        auth_code_ID = #{authCodeId}
+    ]]>
+	</update>
+
+    <delete id="delete">
+    <![CDATA[
+        DELETE FROM auth_code WHERE
+        auth_code_ID = #{authCodeId}
+    ]]>
+    </delete>
+    
+    <select id="getById" resultMap="AuthCodeResultMap">
+		SELECT <include refid="AuthCodeColumns" />
+	    <![CDATA[
+		    FROM auth_code 
+	        WHERE 
+		        auth_code_ID = #{authCodeId}
+	    ]]>
+	</select>
+	
+	<sql id="AuthCodeFindPageWhere">
+		<where>
+	       <if test="@Ognl@isNotEmpty(authCodeId)">
+				AND auth_code_ID = #{authCodeId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(name)">
+				AND NAME = #{name}
+			</if>
+	       <if test="@Ognl@isNotEmpty(requstTimeBegin)">
+				AND REQUST_TIME >= #{requstTimeBegin}
+		   </if>
+		   <if test="@Ognl@isNotEmpty(requstTimeEnd)">
+				AND REQUST_TIME &lt;= #{requstTimeEnd}
+		   </if>
+	       <if test="@Ognl@isNotEmpty(authCode)">
+				AND AUTH_CODE = #{authCode}
+			</if>
+	       <if test="@Ognl@isNotEmpty(isInvalid)">
+				AND IS_INVALID = #{isInvalid}
+			</if>
+	       <if test="@Ognl@isNotEmpty(type)">
+				AND TYPE = #{type}
+			</if>
+		</where>
+	</sql>
+
+    <select id="findPage" resultMap="AuthCodeResultMap">
+    	SELECT <include refid="AuthCodeColumns" />
+	    FROM auth_code 
+		<include refid="AuthCodeFindPageWhere"/>
+		
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+    
+    <select id="getAuthCode" resultMap="AuthCodeResultMap">
+		SELECT <include refid="AuthCodeColumns" />
+		    FROM auth_code 
+	        WHERE is_invalid='0'
+	        <if test="@Ognl@isNotEmpty(authCodeId)">
+				AND ID = #{authCodeId}
+			</if>
+	        <if test="@Ognl@isNotEmpty(name)">
+				AND NAME = #{name}
+			</if>
+	        <if test="@Ognl@isNotEmpty(authCode)">
+				AND AUTH_CODE = #{authCode}
+			</if>
+	        <if test="@Ognl@isNotEmpty(isInvalid)">
+				AND IS_INVALID = #{isInvalid}
+			</if>
+	        <if test="@Ognl@isNotEmpty(type)">
+				AND TYPE = #{type}
+			</if>
+	</select>
+
+	<select id="getLastLog" resultMap="AuthCodeResultMap">
+		SELECT <include refid="AuthCodeColumns" />
+		FROM auth_code_log
+		WHERE auth_code_mobile = #{mobile}
+		ORDER BY auth_code_time DESC LIMIT 1
+	</select>
+
+	<select id="countSendTimesOneDay" resultType="long">
+		SELECT COUNT(*) FROM auth_code_log
+		WHERE  auth_code_time > DATE_SUB(NOW(),INTERVAL 24 HOUR)
+		AND  auth_code_mobile = #{mobile}
+	</select>
+
+	<!--插入一条短信发送日志-->
+	<insert id="insertAuthCodeLog" useGeneratedKeys="true" keyProperty="authCodeLogId">
+		<![CDATA[
+        INSERT INTO auth_code_log (
+        	auth_code_log_id ,
+        	auth_code_time ,
+        	auth_code_mobile ,
+        	auth_code_type ,
+        	auth_code,
+        	auth_code_ipaddr
+        ) VALUES (
+        	#{authCodeLogId} ,
+        	#{authCodeTime} ,
+        	#{authCodeMobile} ,
+        	#{authCodeType} ,
+        	#{authCode},
+        	#{authCodeIpAddr}
+        )
+    ]]>
+	</insert>
+	
+</mapper>
+

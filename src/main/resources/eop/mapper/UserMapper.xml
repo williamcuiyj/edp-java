@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="eop.mapper.UserMapper">
+
+    <resultMap id="UserResultMap" type="eop.model.User">
+        <result property="userId" column="user_id"/>
+        <result property="password" column="password"/>
+        <result property="uuid" column="uuid"/>
+        <result property="status" column="status"/>
+        <result property="email" column="email"/>
+        <result property="mobile" column="mobile"/>
+        <result property="lasttime" column="lasttime"/>
+        <result property="lastip" column="lastip"/>
+        <result property="regIp" column="reg_ip"/>
+        <result property="regTime" column="reg_time"/>
+        <result property="headImg" column="head_img"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="logincount" column="logincount"/>
+        <result property="realName" column="real_name"/>
+        <result property="qq" column="qq"/>
+        <result property="idNumber" column="id_number"/>
+        <result property="gender" column="gender"/>
+        <result property="userType" column="user_type"/>
+        <result property="province" column="province"/>
+        <result property="company" column="company"/>
+        <result property="companyAddr" column="company_addr"/>
+        <result property="companyTitle" column="company_title"/>
+        <result property="companyPhone" column="company_phone"/>
+        <result property="school" column="school"/>
+        <result property="degree" column="degree"/>
+        <result property="finishSchool" column="finish_school"/>
+
+    </resultMap>
+
+    <sql id="UserColumns">
+        <![CDATA[
+		u.user_id,u.uuid,u.password,u.status,u.email,u.mobile,
+		u.logincount,u.lasttime,u.lastip,u.reg_ip,u.reg_time,u.head_img,
+		u.nick_name,u.real_name,u.qq,u.id_number,u.gender,u.user_type,u.province,
+		u.company,u.company_addr,u.company_title,u.company_phone,u.school,u.degree,
+		u.finish_school
+        ]]>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="userId">
+        <![CDATA[
+        INSERT INTO user (
+        	user_id ,
+        	uuid ,
+        	password ,
+        	status ,
+        	email ,
+        	mobile ,
+        	logincount ,
+        	lasttime ,
+        	lastip ,
+        	reg_ip ,
+        	reg_time,
+        	head_img,
+        	nick_name ,
+        	real_name ,
+        	qq ,
+        	id_number ,
+        	gender ,
+        	user_type ,
+        	province ,
+        	company ,
+        	company_addr ,
+        	company_title ,
+        	company_phone ,
+        	school,
+        	degree,
+        	finish_school
+        ) VALUES (
+        	#{userId} ,
+        	#{uuid} ,
+        	#{password} ,
+        	#{status} ,
+        	#{email} ,
+        	#{mobile} ,
+        	#{logincount} ,
+        	#{lasttime} ,
+        	#{lastip} ,
+        	#{regIp} ,
+        	#{regTime},
+        	#{headImg},
+        	#{nickName} ,
+        	#{realName} ,
+        	#{qq} ,
+        	#{idNumber} ,
+        	#{gender} ,
+        	#{userType} ,
+        	#{province} ,
+        	#{company} ,
+        	#{companyAddr} ,
+        	#{companyTitle} ,
+        	#{companyPhone} ,
+        	#{school},
+        	#{degree},
+        	#{finishSchool}
+        )
+        ]]>
+    </insert>
+
+    <update id="update">
+        <![CDATA[
+        UPDATE user SET
+	        uuid = #{uuid} ,
+	        password = #{password} ,
+	        status = #{status} ,
+	        email = #{email} ,
+	        mobile = #{mobile} ,
+	        logincount = #{logincount} ,
+	        lasttime = #{lasttime} ,
+	        lastip = #{lastip} ,
+	        reg_ip = #{regIp} ,
+	        reg_time = #{regTime},
+	        head_img=#{headImg},
+	        nick_name = #{nickName},
+	        uuid = #{uuid} ,
+	        password = #{password} ,
+	        status = #{status} ,
+	        email = #{email} ,
+	        mobile = #{mobile} ,
+	        logincount = #{logincount} ,
+	        lasttime = #{lasttime} ,
+	        lastip = #{lastip} ,
+	        reg_ip = #{regIp} ,
+	        reg_time = #{regTime},
+	        head_img=#{headImg},
+	        nick_name = #{nickName}
+        WHERE
+	        user_id = #{userId}
+        ]]>
+    </update>
+
+    <update id="resetPwd">
+        <![CDATA[
+        UPDATE user SET
+	        password = #{pwd}
+        WHERE
+	        user_id = #{userId}
+        ]]>
+    </update>
+
+    <select id="getById" resultMap="UserResultMap">
+        SELECT
+        <include refid="UserColumns"/>
+        <![CDATA[
+		    FROM user u
+	        WHERE
+		        user_id = #{userId}
+	    ]]>
+    </select>
+
+    <select id="getUserByUUId" resultMap="UserResultMap">
+        SELECT
+        <include refid="UserColumns"/>
+        <![CDATA[
+		    FROM user u
+	        WHERE
+		        u.uuid = #{uuid}
+	    ]]>
+    </select>
+
+    <select id="getUserByPhone" parameterType="java.lang.String"
+            resultMap="UserResultMap">
+        select
+        <include refid="UserColumns"/>
+        FROM user u
+        where (MOBILE = #{phoneNum})
+    </select>
+
+
+    <update id="updateHeadImg">
+        <![CDATA[
+        UPDATE user SET
+	        head_img=#{headImg}
+        WHERE
+	        user_id = #{userId}
+        ]]>
+    </update>
+
+
+    <update id="bindPhone">
+        <![CDATA[
+        UPDATE user SET
+	        password = #{password},
+	        mobile = #{mobile}
+        WHERE
+	        user_id = #{userId}
+        ]]>
+    </update>
+
+    <select id="getUserByNickName" parameterType="java.lang.String"
+            resultMap="UserResultMap">
+        select
+        <include refid="UserColumns"/>
+        FROM user u
+        where nick_name = #{nickName}
+    </select>
+</mapper>
+

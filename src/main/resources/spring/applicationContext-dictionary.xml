@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+       default-autowire="byName" default-lazy-init="false">
+
+    <bean class="eop.util.Dictionary">
+        <property name="dictionary" ref="dictionary"></property>
+    </bean>
+    <bean id="dictionary" class="java.util.LinkedHashMap">
+        <constructor-arg>
+            <map>
+                <entry key="sex">
+                    <bean class="java.util.LinkedHashMap">
+                        <constructor-arg>
+                            <map>
+                                <entry key="00" value="男"></entry>
+                                <entry key="01" value="女"></entry>
+                            </map>
+                        </constructor-arg>
+                    </bean>
+                </entry>
+                <entry key="flag">
+                    <bean class="java.util.LinkedHashMap">
+                        <constructor-arg>
+                            <map>
+                                <entry key="0" value="否"></entry>
+                                <entry key="1" value="是"></entry>
+                            </map>
+                        </constructor-arg>
+                    </bean>
+                </entry>
+
+            </map>
+        </constructor-arg>
+    </bean>
+
+</beans>

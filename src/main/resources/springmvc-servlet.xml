@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd"
+	default-autowire="byName">
+
+	<mvc:annotation-driven conversion-service="conversionService"/>
+	<mvc:default-servlet-handler />
+
+	<context:component-scan base-package="eop.controller" />
+
+
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8"></property>
+		<property name="maxInMemorySize" value="4096" />
+	</bean>
+
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+        <property name="interceptors">
+            <bean class="eop.interceptor.SharedRenderVariableInterceptor"/>
+        </property>
+    </bean>
+
+    <mvc:interceptors>
+        <bean class="eop.interceptor.SharedRenderVariableInterceptor"/>
+    </mvc:interceptors>
+
+	<bean
+			class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean
+						class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/plain;charset=UTF-8</value>
+							<value>application/json;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="viewResolvers">
+			<list>
+				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+				<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+					<property name="prefix" value="/WEB-INF/views/"/>
+					<property name="suffix" value=".jsp"/>
+				</bean>
+			</list>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="conversionService"
+		  class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="converters">
+			<set>
+				<bean class="org.springframework.core.convert.support.StringToEnumConverterFactory"/>
+			</set>
+		</property>
+	</bean>
+
+    <!--<bean id="viewResolver"-->
+          <!--class="org.springframework.web.servlet.view.ResourceBundleViewResolver">-->
+        <!--<property name="basename">-->
+            <!--<value>views</value>-->
+        <!--</property>-->
+        <!--<property name="cache" value="false"/>-->
+    <!--</bean>-->
+
+
+</beans>
