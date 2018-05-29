@@ -1,7 +1,5 @@
 target/
 classes/
 .idea
-YunPianMessager.java
-jshome.jsp
-messages_zh_CN.properties
+*.iml
 
