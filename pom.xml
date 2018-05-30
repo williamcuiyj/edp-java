@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.eop</groupId>
-    <artifactId>eop</artifactId>
+    <groupId>io.yingjia</groupId>
+    <artifactId>java</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
 
@@ -14,13 +14,13 @@
         <spring.version>4.3.2.RELEASE</spring.version>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
     </properties>
-    <repositories>
-        <repository>
-            <id>local</id>
-            <name>本地私有仓库</name>
-            <url>http://192.168.1.196:8081/nexus/content/groups/public</url>
-        </repository>
-    </repositories>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>local</id>-->
+            <!--<name>本地私有仓库</name>-->
+            <!--<url>http://maven.yingjia.io/nexus/content/groups/public</url>-->
+        <!--</repository>-->
+    <!--</repositories>-->
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
